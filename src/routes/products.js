@@ -1,15 +1,26 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 const { db } = require('../database/db');
 const { authenticate, isAdmin } = require('../middleware/auth');
 
 const router = express.Router();
 
+// Caminho de uploads: Volume no Railway ou pasta local
+const productionUploadsPath = process.env.UPLOADS_PATH || '/app/data/uploads';
+const localUploadsPath = path.join(__dirname, '..', '..', 'uploads');
+const uploadsPath = process.env.NODE_ENV === 'production' ? productionUploadsPath : localUploadsPath;
+
+// Garantir que o diretório de uploads existe
+if (!fs.existsSync(uploadsPath)) {
+    fs.mkdirSync(uploadsPath, { recursive: true });
+}
+
 // Configuração do Multer para upload de imagens
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, '..', '..', 'uploads'));
+        cb(null, uploadsPath);
     },
     filename: (req, file, cb) => {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);

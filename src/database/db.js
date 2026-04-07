@@ -1,8 +1,20 @@
 const Database = require('better-sqlite3');
 const path = require('path');
+const fs = require('fs');
 
-const dbPath = path.join(__dirname, '..', '..', 'store.db');
-const db = new Database(dbPath);
+// Em produção (Railway com Volume), usa DB_PATH ou /app/data/store.db
+// Em dev local, usa o arquivo na raiz do projeto
+const productionDbPath = process.env.DB_PATH || '/app/data/store.db';
+const localDbPath = path.join(__dirname, '..', '..', 'store.db');
+const finalPath = process.env.NODE_ENV === 'production' ? productionDbPath : localDbPath;
+
+// Garantir que o diretório do banco existe (importante para o Volume no Railway)
+const dbDir = path.dirname(finalPath);
+if (!fs.existsSync(dbDir)) {
+    fs.mkdirSync(dbDir, { recursive: true });
+}
+
+const db = new Database(finalPath);
 
 // Habilitar WAL mode para melhor performance
 db.pragma('journal_mode = WAL');

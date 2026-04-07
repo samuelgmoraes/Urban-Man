@@ -19,8 +19,11 @@ app.use(express.urlencoded({ extended: true }));
 // Servir arquivos estáticos do frontend
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Servir uploads de imagens
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// Servir uploads de imagens (do Volume em produção ou pasta local em dev)
+const productionUploadsPath = process.env.UPLOADS_PATH || '/app/data/uploads';
+const localUploadsPath = path.join(__dirname, 'uploads');
+const uploadsPath = process.env.NODE_ENV === 'production' ? productionUploadsPath : localUploadsPath;
+app.use('/uploads', express.static(uploadsPath));
 
 // --- Rotas da API ---
 app.use('/api/auth', require('./src/routes/auth'));
