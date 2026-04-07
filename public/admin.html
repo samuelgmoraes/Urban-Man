@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | URBAN MAN</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+    <!-- TELA DE LOGIN (Mostrada se não estiver autenticado) -->
+    <div id="loginView" class="view-container active">
+        <div class="login-box">
+            <h1 class="logo">URBAN MAN</h1>
+            <p class="subtitle">Acesso Restrito</p>
+            <form id="loginForm">
+                <input type="email" id="loginEmail" placeholder="E-mail admin" required>
+                <input type="password" id="loginPassword" placeholder="Senha" required>
+                <button type="submit" class="btn-primary" style="width: 100%;">Entrar no Painel</button>
+            </form>
+            <div id="loginError" class="error-msg"></div>
+        </div>
+    </div>
+
+    <!-- TELA DO PAINEL (Mostrada após Login) -->
+    <div id="adminView" class="view-container">
+        
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1 class="logo-small">URBAN MAN</h1>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-tab="products">Produtos</a>
+                <a href="#" class="nav-item" data-tab="categories">Categorias</a>
+                <a href="#" class="nav-item" data-tab="orders">Pedidos</a>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="logoutBtn" class="btn-text">Sair</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-header">
+                <h2 id="pageTitle">Gerenciar Produtos</h2>
+                <button id="btnNewProduct" class="btn-primary">+ Novo Produto</button>
+            </header>
+
+            <div class="content-area">
+                
+                <!-- TAB PRODUTOS -->
+                <div id="tab-products" class="tab-content active">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Imagem</th>
+                                <th>Nome</th>
+                                <th>Preço</th>
+                                <th>Estoque</th>
+                                <th>Categoria</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productsTableBody">
+                            <!-- JS preenche -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- TAB CATEGORIAS -->
+                <div id="tab-categories" class="tab-content">
+                    <p>Módulo de Categorias em desenvolvimento...</p>
+                </div>
+
+                <!-- TAB PEDIDOS -->
+                <div id="tab-orders" class="tab-content">
+                    <p>Módulo de Pedidos em desenvolvimento...</p>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL NOVO PRODUTO -->
+    <div id="productModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Cadastrar Novo Produto</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="productForm">
+                    <div class="input-group">
+                        <label>Nome do Produto</label>
+                        <input type="text" id="prodName" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Descrição</label>
+                        <textarea id="prodDesc" rows="3" required></textarea>
+                    </div>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label>Preço atual (R$)</label>
+                            <input type="number" step="0.01" id="prodPrice" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Preço antigo (R$)</label>
+                            <input type="number" step="0.01" id="prodPriceOld" placeholder="Opcional">
+                        </div>
+                    </div>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label>Estoque</label>
+                            <input type="number" id="prodStock" value="10" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Categoria ID</label>
+                            <select id="prodCategory" required>
+                                <!-- JS Popula (IDs hardcoded para fallback) -->
+                                <option value="1">Camisetas</option>
+                                <option value="2">Calças</option>
+                                <option value="3">Jaquetas</option>
+                                <option value="4">Bermudas</option>
+                                <option value="5">Calçados</option>
+                                <option value="6">Acessórios</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="input-group checkbox-group">
+                        <input type="checkbox" id="prodFeatured" value="1" checked>
+                        <label for="prodFeatured">Destacar na página inicial (Lançamento)</label>
+                    </div>
+                    <div class="input-group">
+                        <label>Imagem do Produto</label>
+                        <input type="file" id="prodImage" accept="image/*">
+                    </div>
+                    
+                    <button type="submit" class="btn-primary" style="width: 100%; margin-top:20px;">Salvar Produto</button>
+                    <div id="modalStatus" style="margin-top:10px; font-size:14px;"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>

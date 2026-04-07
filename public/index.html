@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>URBAN MAN | Loja de Roupas Masculinas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+        Frete grátis para todo o Brasil nas compras acima de R$299
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="navbar container">
+            <!-- Mobile Menu Button -->
+            <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            
+            <!-- Logo -->
+            <a href="#" class="logo">URBAN MAN</a>
+            
+            <!-- Desktop Navigation -->
+            <nav class="nav-links" id="navLinks">
+                <a href="index.html">Início</a>
+                <a href="index.html?todos=1">Lançamentos</a>
+                <a href="index.html?categoria=camisetas">Camisetas</a>
+                <a href="index.html?categoria=calcas">Calças</a>
+                <a href="index.html?categoria=acessorios">Acessórios</a>
+            </nav>
+            
+            <!-- Icons -->
+            <div class="nav-icons">
+                <button class="icon-btn" aria-label="Buscar">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                </button>
+                <button class="icon-btn user-btn" aria-label="Usuário">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                </button>
+                <button class="icon-btn cart-btn" id="cartToggle" aria-label="Carrinho">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                    <span class="cart-count">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+
+    <!-- Hero Banner -->
+    <section class="hero fade-in">
+        <div class="hero-bg">
+            <!-- Insira a imagem do seu cliente aqui no src -->
+            <img src="https://images.unsplash.com/photo-1617137968427-85924c800a22?w=1600&q=80" alt="Banner Principal" id="heroImage" style="width:100%; height:100%; object-fit:cover;"> 
+        </div>
+        <div class="hero-content">
+            <h1>Nova Coleção Inverno</h1>
+            <p>A união perfeita entre o design urbano e o estilo minimalista.</p>
+            <a href="index.html?todos=1" class="btn-primary">Ver Coleção</a>
+        </div>
+    </section>
+
+    <!-- Categories Carousel (Circulos) — Carregado via API -->
+    <section class="categories-circle container fade-in" id="categoriesContainer">
+        <!-- Categorias serão carregadas dinamicamente -->
+    </section>
+
+    <!-- Featured Products Grid — Carregado via API -->
+    <section class="featured-products container fade-in">
+        <h2 class="section-title">Lançamentos</h2>
+        <div class="product-grid" id="productGrid">
+            <!-- Produtos serão carregados dinamicamente -->
+        </div>
+        
+        <div class="view-all-wrapper">
+            <a href="index.html?todos=1" class="btn-secondary">Ver Todos os Produtos</a>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter fade-in">
+        <div class="container newsletter-content">
+            <h2>Faça parte do clube</h2>
+            <p>Assine nossa newsletter e ganhe <strong>10% off</strong> na sua primeira compra.</p>
+            <form class="newsletter-form">
+                <input type="email" placeholder="Digite seu melhor e-mail" required>
+                <button type="submit">Cadastrar</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer fade-in">
+        <div class="container footer-grid">
+            <div class="footer-col brand-col">
+                <h3>URBAN MAN</h3>
+                <p>Estilo minimalista e premium para o homem moderno. Conforto em cada detalhe.</p>
+            </div>
+            
+            <div class="footer-col">
+                <h4>Navegação</h4>
+                <a href="#">Início</a>
+                <a href="#">Roupas</a>
+                <a href="#">Acessórios</a>
+                <a href="#">Lançamentos</a>
+                <a href="#">Sale</a>
+            </div>
+            
+            <div class="footer-col">
+                <h4>Atendimento</h4>
+                <a href="#">Minha Conta</a>
+                <a href="#">Meus Pedidos</a>
+                <a href="#">Trocas e Devoluções</a>
+                <a href="#">Política de Privacidade</a>
+                <a href="#">Contato</a>
+            </div>
+            
+            <div class="footer-col">
+                <h4>Siga-nos</h4>
+                <div class="social-links">
+                    <a href="#">Instagram</a>
+                    <a href="#">TikTok</a>
+                    <a href="#">WhatsApp</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom container">
+            <p>&copy; 2026 Urban Man. Todos os direitos reservados.</p>
+            <div class="payment-methods">
+                <!-- Icones simplificados para metodos de pagamento -->
+                <span>PIX</span>
+                <span>VISA</span>
+                <span>MASTERCARD</span>
+                <span>BOLETO</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Drawer (Carrinho Lateral) -->
+    <div class="cart-drawer-overlay" id="cartOverlay">
+        <div class="cart-drawer" id="cartDrawer">
+            <div class="cart-header">
+                <h2>Seu Carrinho</h2>
+                <button class="close-cart" id="closeCart">&times;</button>
+            </div>
+            <div class="cart-body">
+                <div class="empty-cart-msg">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                    <p>Seu carrinho está vazio.</p>
+                    <button class="btn-primary" id="btnContinueShopping">Continuar Comprando</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

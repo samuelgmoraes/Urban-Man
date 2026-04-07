@@ -1,0 +1,113 @@
+<!DOCTYPE insulated>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | URBAN MAN</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="checkout.css">
+</head>
+<body class="checkout-page">
+
+    <!-- HEADER SIMPLIFICADO P/ CHECKOUT -->
+    <header class="header checkout-header">
+        <div class="container">
+            <div class="navbar" style="justify-content: center;">
+                <a href="index.html" class="logo">URBAN MAN</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="checkout-container container">
+        <div class="checkout-layout">
+            
+            <!-- FORMULÁRIO DE DADOS (Esquerda) -->
+            <section class="checkout-form-section">
+                <h1 class="checkout-title">Finalizar Pedido</h1>
+                
+                <form id="checkoutForm" class="checkout-form">
+                    
+                    <div class="form-group">
+                        <h3 class="form-section-title">Dados Pessoais</h3>
+                        <div class="input-row">
+                            <input type="text" id="custName" name="custName" placeholder="Nome completo" required>
+                        </div>
+                        <div class="input-row">
+                            <input type="email" id="custEmail" name="custEmail" placeholder="E-mail" required>
+                            <input type="tel" id="custPhone" name="custPhone" placeholder="Celular / WhatsApp (opcional)">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <h3 class="form-section-title">Endereço de Entrega</h3>
+                        <div class="input-row">
+                            <input type="text" id="addressZip" name="addressZip" placeholder="CEP" required>
+                            <span class="spacer"></span>
+                        </div>
+                        <div class="input-row">
+                            <input type="text" id="addressStreet" name="addressStreet" placeholder="Rua / Avenida" required>
+                        </div>
+                        <div class="input-row">
+                            <input type="text" id="addressNum" name="addressNum" placeholder="Número" required>
+                            <input type="text" id="addressComp" name="addressComp" placeholder="Complemento (opcional)">
+                        </div>
+                        <div class="input-row">
+                            <input type="text" id="addressCity" name="addressCity" placeholder="Cidade" required>
+                            <input type="text" id="addressState" name="addressState" placeholder="Estado (Ex: SP)" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <h3 class="form-section-title">Pagamento (Simulado)</h3>
+                        <p class="payment-note">As opções reais ficarão disponíveis após ativação do gateway de pagamento. Pagamento será "Pix / Boleto" no modo demo.</p>
+                    </div>
+
+                    <button type="submit" class="btn-primary btn-submit-order" id="submitOrderBtn">Confirmar Compra</button>
+                    <a href="index.html" class="back-to-shop">Ou voltar para a loja</a>
+                </form>
+
+            </section>
+
+            <!-- RESUMO DO PEDIDO (Direita) -->
+            <aside class="checkout-summary-section">
+                <div class="summary-box">
+                    <h2 class="summary-title">Resumo</h2>
+                    
+                    <div class="summary-items" id="checkoutItems">
+                        <!-- Itens renderizados pelo JS -->
+                    </div>
+
+                    <div class="summary-totals">
+                        <div class="total-row">
+                            <span>Subtotal</span>
+                            <span id="summarySubtotal">R$ 0,00</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Frete</span>
+                            <span>Grátis</span>
+                        </div>
+                        <div class="total-row total-final">
+                            <span>Total</span>
+                            <strong id="summaryTotal">R$ 0,00</strong>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+            
+        </div>
+    </main>
+
+    <footer class="footer" style="padding-top: 40px;">
+        <div class="footer-bottom container" style="border-top:none; background:transparent;">
+            <p>&copy; 2026 URBAN MAN. Demo Mode.</p>
+        </div>
+    </footer>
+
+    <!-- CHECKOUT SCRIPT -->
+    <script src="checkout.js"></script>
+</body>
+</html>
