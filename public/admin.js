@@ -59,7 +59,18 @@ document.addEventListener('DOMContentLoaded', () => {
         statusDiv.style.color = '#000';
 
         const formData = new FormData();
-        formData.append('name', document.getElementById('prodName').value);
+        const prodName = document.getElementById('prodName').value;
+        
+        // Gerar slug automaticamente a partir do nome
+        const slug = prodName
+            .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // Remove acentos
+            .toLowerCase()
+            .replace(/[^a-z0-9\s-]/g, '')  // Remove caracteres especiais
+            .trim()
+            .replace(/\s+/g, '-');           // Espaços viram hífens
+        
+        formData.append('name', prodName);
+        formData.append('slug', slug);
         formData.append('description', document.getElementById('prodDesc').value);
         formData.append('price', document.getElementById('prodPrice').value);
         formData.append('category_id', document.getElementById('prodCategory').value);
