@@ -3,10 +3,17 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const { initializeDatabase } = require('./src/database/db');
+const { db, initializeDatabase } = require('./src/database/db');
 
 // Inicializar banco de dados
 initializeDatabase();
+
+// Auto-seed: preencher o banco se estiver vazio (1º deploy no Railway)
+const { total } = db.prepare('SELECT COUNT(*) as total FROM products').get();
+if (total === 0) {
+    console.log('📦 Banco de dados vazio. Executando seed automático...');
+    require('./src/database/seed');
+}
 
 const app = express();
 const PORT = process.env.PORT || 3000;
