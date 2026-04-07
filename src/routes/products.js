@@ -8,7 +8,7 @@ const { authenticate, isAdmin } = require('../middleware/auth');
 const router = express.Router();
 
 // Caminho de uploads: Volume no Railway ou pasta local
-const productionUploadsPath = process.env.UPLOADS_PATH || '/app/data/uploads';
+const productionUploadsPath = process.env.UPLOAD_PATH || '/app/data/uploads';
 const localUploadsPath = path.join(__dirname, '..', '..', 'uploads');
 const uploadsPath = process.env.NODE_ENV === 'production' ? productionUploadsPath : localUploadsPath;
 

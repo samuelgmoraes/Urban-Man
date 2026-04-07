@@ -20,7 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Servir uploads de imagens (do Volume em produção ou pasta local em dev)
-const productionUploadsPath = process.env.UPLOADS_PATH || '/app/data/uploads';
+const productionUploadsPath = process.env.UPLOAD_PATH || '/app/data/uploads';
 const localUploadsPath = path.join(__dirname, 'uploads');
 const uploadsPath = process.env.NODE_ENV === 'production' ? productionUploadsPath : localUploadsPath;
 app.use('/uploads', express.static(uploadsPath));
