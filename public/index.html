@@ -41,10 +41,10 @@
             
             <!-- Icons -->
             <div class="nav-icons">
-                <button class="icon-btn" aria-label="Buscar">
+                <button class="icon-btn search-btn" id="searchToggle" aria-label="Buscar">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                 </button>
-                <button class="icon-btn user-btn" aria-label="Usuário">
+                <button class="icon-btn user-btn" id="userToggle" aria-label="Usuário">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                 </button>
                 <button class="icon-btn cart-btn" id="cartToggle" aria-label="Carrinho">
@@ -58,10 +58,104 @@
     <!-- Mobile Menu Overlay -->
     <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
 
+    <!-- Search Overlay -->
+    <div class="search-overlay" id="searchOverlay">
+        <div class="search-overlay-inner">
+            <button class="search-close" id="searchClose">&times;</button>
+            <div class="search-container">
+                <h2 class="search-heading">O que você procura?</h2>
+                <div class="search-input-wrapper">
+                    <svg class="search-input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input type="text" id="searchInput" placeholder="Buscar produtos..." autocomplete="off">
+                </div>
+                <div class="search-results" id="searchResults">
+                    <p class="search-hint">Digite para buscar camisetas, calças, jaquetas...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auth Modal -->
+    <div class="auth-modal-overlay" id="authOverlay">
+        <div class="auth-modal" id="authModal">
+            <button class="auth-close" id="authClose">&times;</button>
+            
+            <!-- Login Form -->
+            <div class="auth-form" id="loginForm">
+                <div class="auth-header">
+                    <div class="auth-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    </div>
+                    <h2>Entrar na Conta</h2>
+                    <p>Acesse sua conta Urban Man</p>
+                </div>
+                <div class="auth-body">
+                    <div class="form-group">
+                        <label for="loginEmail">E-mail</label>
+                        <input type="email" id="loginEmail" placeholder="seu@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Senha</label>
+                        <input type="password" id="loginPassword" placeholder="••••••" required>
+                    </div>
+                    <div class="auth-error" id="loginError"></div>
+                    <button class="btn-primary auth-submit" id="btnLogin">Entrar</button>
+                </div>
+                <div class="auth-footer">
+                    <p>Não tem conta? <a href="#" id="showRegister">Criar conta</a></p>
+                </div>
+            </div>
+
+            <!-- Register Form -->
+            <div class="auth-form" id="registerForm" style="display: none;">
+                <div class="auth-header">
+                    <div class="auth-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+                    </div>
+                    <h2>Criar Conta</h2>
+                    <p>Junte-se ao Urban Man</p>
+                </div>
+                <div class="auth-body">
+                    <div class="form-group">
+                        <label for="registerName">Nome Completo</label>
+                        <input type="text" id="registerName" placeholder="Seu nome" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerEmail">E-mail</label>
+                        <input type="email" id="registerEmail" placeholder="seu@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerPassword">Senha</label>
+                        <input type="password" id="registerPassword" placeholder="Mínimo 6 caracteres" required>
+                    </div>
+                    <div class="auth-error" id="registerError"></div>
+                    <button class="btn-primary auth-submit" id="btnRegister">Criar Conta</button>
+                </div>
+                <div class="auth-footer">
+                    <p>Já tem conta? <a href="#" id="showLogin">Entrar</a></p>
+                </div>
+            </div>
+
+            <!-- Logged In State -->
+            <div class="auth-form" id="loggedInView" style="display: none;">
+                <div class="auth-header">
+                    <div class="auth-icon auth-icon-success">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    </div>
+                    <h2 id="loggedUserName">Olá!</h2>
+                    <p id="loggedUserEmail">email@exemplo.com</p>
+                </div>
+                <div class="auth-body logged-body">
+                    <a href="/admin.html" class="btn-secondary auth-link" id="btnAdminPanel" style="display: none;">Painel Admin</a>
+                    <button class="btn-secondary auth-submit" id="btnLogout">Sair da Conta</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Hero Banner -->
     <section class="hero fade-in">
         <div class="hero-bg">
-            <!-- Insira a imagem do seu cliente aqui no src -->
             <img src="https://images.unsplash.com/photo-1617137968427-85924c800a22?w=1600&q=80" alt="Banner Principal" id="heroImage" style="width:100%; height:100%; object-fit:cover;"> 
         </div>
         <div class="hero-content">
@@ -139,7 +233,6 @@
         <div class="footer-bottom container">
             <p>&copy; 2026 Urban Man. Todos os direitos reservados.</p>
             <div class="payment-methods">
-                <!-- Icones simplificados para metodos de pagamento -->
                 <span>PIX</span>
                 <span>VISA</span>
                 <span>MASTERCARD</span>

@@ -180,6 +180,344 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // =============================================
+    // SEARCH OVERLAY
+    // =============================================
+    const searchToggle = document.getElementById('searchToggle');
+    const searchOverlay = document.getElementById('searchOverlay');
+    const searchClose = document.getElementById('searchClose');
+    const searchInput = document.getElementById('searchInput');
+    const searchResults = document.getElementById('searchResults');
+    let searchTimeout = null;
+
+    function openSearch() {
+        if (!searchOverlay) return;
+        searchOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        // Focus the input after animation
+        setTimeout(() => {
+            if (searchInput) searchInput.focus();
+        }, 400);
+    }
+
+    function closeSearch() {
+        if (!searchOverlay) return;
+        searchOverlay.classList.remove('active');
+        document.body.style.overflow = 'auto';
+        if (searchInput) searchInput.value = '';
+        if (searchResults) {
+            searchResults.innerHTML = '<p class="search-hint">Digite para buscar camisetas, calças, jaquetas...</p>';
+        }
+    }
+
+    if (searchToggle) searchToggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        openSearch();
+    });
+
+    if (searchClose) searchClose.addEventListener('click', closeSearch);
+
+    if (searchOverlay) {
+        searchOverlay.addEventListener('click', (e) => {
+            if (e.target === searchOverlay || e.target.classList.contains('search-overlay-inner')) {
+                // Only close if clicking outside the search container
+                const container = document.querySelector('.search-container');
+                if (container && !container.contains(e.target)) {
+                    closeSearch();
+                }
+            }
+        });
+    }
+
+    // ESC key to close search
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            if (searchOverlay && searchOverlay.classList.contains('active')) {
+                closeSearch();
+            }
+            if (authOverlay && authOverlay.classList.contains('active')) {
+                closeAuth();
+            }
+        }
+    });
+
+    if (searchInput) {
+        searchInput.addEventListener('input', () => {
+            const query = searchInput.value.trim();
+            
+            if (searchTimeout) clearTimeout(searchTimeout);
+            
+            if (query.length < 2) {
+                searchResults.innerHTML = '<p class="search-hint">Digite para buscar camisetas, calças, jaquetas...</p>';
+                return;
+            }
+
+            searchResults.innerHTML = '<p class="search-hint">Buscando...</p>';
+
+            searchTimeout = setTimeout(async () => {
+                try {
+                    const res = await fetch(`${API_BASE}/products?search=${encodeURIComponent(query)}&limit=8`);
+                    const data = await res.json();
+
+                    if (!data.products || data.products.length === 0) {
+                        searchResults.innerHTML = `
+                            <div class="search-no-results">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                                <p>Nenhum produto encontrado para "<strong>${query}</strong>"</p>
+                            </div>
+                        `;
+                        return;
+                    }
+
+                    searchResults.innerHTML = `
+                        <div class="search-results-grid">
+                            ${data.products.map(p => `
+                                <a href="index.html?categoria=${p.category_slug || ''}" class="search-result-item" data-product='${JSON.stringify({ id: p.id, name: p.name, price: p.price, image_url: p.image_url })}'>
+                                    <div class="search-result-img">
+                                        ${p.image_url ? `<img src="${p.image_url}" alt="${p.name}">` : ''}
+                                    </div>
+                                    <div class="search-result-info">
+                                        <span class="search-result-category">${p.category_name || ''}</span>
+                                        <h4>${p.name}</h4>
+                                        <span>R$ ${p.price.toFixed(2).replace('.', ',')}</span>
+                                    </div>
+                                </a>
+                            `).join('')}
+                        </div>
+                    `;
+
+                    // Add to cart on click
+                    searchResults.querySelectorAll('.search-result-item').forEach(item => {
+                        item.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            const product = JSON.parse(item.dataset.product);
+                            addToCart(product);
+                            closeSearch();
+                        });
+                    });
+
+                } catch (err) {
+                    console.error('Erro na busca:', err);
+                    searchResults.innerHTML = '<p class="search-hint">Erro ao buscar. Tente novamente.</p>';
+                }
+            }, 350); // Debounce de 350ms
+        });
+    }
+
+    // =============================================
+    // AUTH MODAL (Login / Register / Logged In)
+    // =============================================
+    const authOverlay = document.getElementById('authOverlay');
+    const authClose = document.getElementById('authClose');
+    const userToggle = document.getElementById('userToggle');
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    const loggedInView = document.getElementById('loggedInView');
+    const showRegister = document.getElementById('showRegister');
+    const showLogin = document.getElementById('showLogin');
+
+    function openAuth() {
+        if (!authOverlay) return;
+        // Check if user is logged in
+        const token = localStorage.getItem('urban_token');
+        const userData = JSON.parse(localStorage.getItem('urban_user') || 'null');
+
+        if (token && userData) {
+            showLoggedInState(userData);
+        } else {
+            showLoginForm();
+        }
+
+        authOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeAuth() {
+        if (!authOverlay) return;
+        authOverlay.classList.remove('active');
+        document.body.style.overflow = 'auto';
+        clearAuthErrors();
+    }
+
+    function showLoginForm() {
+        if (loginForm) loginForm.style.display = 'block';
+        if (registerForm) registerForm.style.display = 'none';
+        if (loggedInView) loggedInView.style.display = 'none';
+    }
+
+    function showRegisterForm() {
+        if (loginForm) loginForm.style.display = 'none';
+        if (registerForm) registerForm.style.display = 'block';
+        if (loggedInView) loggedInView.style.display = 'none';
+    }
+
+    function showLoggedInState(user) {
+        if (loginForm) loginForm.style.display = 'none';
+        if (registerForm) registerForm.style.display = 'none';
+        if (loggedInView) loggedInView.style.display = 'block';
+
+        const nameEl = document.getElementById('loggedUserName');
+        const emailEl = document.getElementById('loggedUserEmail');
+        const adminBtn = document.getElementById('btnAdminPanel');
+
+        if (nameEl) nameEl.textContent = `Olá, ${user.name}!`;
+        if (emailEl) emailEl.textContent = user.email;
+        if (adminBtn) {
+            adminBtn.style.display = user.role === 'admin' ? 'block' : 'none';
+        }
+    }
+
+    function clearAuthErrors() {
+        const loginError = document.getElementById('loginError');
+        const registerError = document.getElementById('registerError');
+        if (loginError) loginError.textContent = '';
+        if (registerError) registerError.textContent = '';
+    }
+
+    function updateUserIcon() {
+        const btn = document.getElementById('userToggle');
+        if (!btn) return;
+        const token = localStorage.getItem('urban_token');
+        if (token) {
+            btn.classList.add('logged-in');
+        } else {
+            btn.classList.remove('logged-in');
+        }
+    }
+
+    if (userToggle) userToggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        openAuth();
+    });
+
+    if (authClose) authClose.addEventListener('click', closeAuth);
+
+    if (authOverlay) authOverlay.addEventListener('click', (e) => {
+        if (e.target === authOverlay) closeAuth();
+    });
+
+    if (showRegister) showRegister.addEventListener('click', (e) => {
+        e.preventDefault();
+        clearAuthErrors();
+        showRegisterForm();
+    });
+
+    if (showLogin) showLogin.addEventListener('click', (e) => {
+        e.preventDefault();
+        clearAuthErrors();
+        showLoginForm();
+    });
+
+    // Login
+    const btnLogin = document.getElementById('btnLogin');
+    if (btnLogin) {
+        btnLogin.addEventListener('click', async () => {
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const errorEl = document.getElementById('loginError');
+
+            if (!email || !password) {
+                if (errorEl) errorEl.textContent = 'Preencha todos os campos.';
+                return;
+            }
+
+            btnLogin.textContent = 'Entrando...';
+            btnLogin.disabled = true;
+
+            try {
+                const res = await fetch(`${API_BASE}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    localStorage.setItem('urban_token', data.token);
+                    localStorage.setItem('urban_user', JSON.stringify(data.user));
+                    showLoggedInState(data.user);
+                    updateUserIcon();
+                    // Clear inputs
+                    document.getElementById('loginEmail').value = '';
+                    document.getElementById('loginPassword').value = '';
+                } else {
+                    if (errorEl) errorEl.textContent = data.error || 'Erro ao fazer login.';
+                }
+            } catch (err) {
+                console.error('Erro no login:', err);
+                if (errorEl) errorEl.textContent = 'Erro de conexão. Tente novamente.';
+            } finally {
+                btnLogin.textContent = 'Entrar';
+                btnLogin.disabled = false;
+            }
+        });
+    }
+
+    // Register
+    const btnRegister = document.getElementById('btnRegister');
+    if (btnRegister) {
+        btnRegister.addEventListener('click', async () => {
+            const name = document.getElementById('registerName').value.trim();
+            const email = document.getElementById('registerEmail').value.trim();
+            const password = document.getElementById('registerPassword').value;
+            const errorEl = document.getElementById('registerError');
+
+            if (!name || !email || !password) {
+                if (errorEl) errorEl.textContent = 'Preencha todos os campos.';
+                return;
+            }
+
+            if (password.length < 6) {
+                if (errorEl) errorEl.textContent = 'A senha deve ter pelo menos 6 caracteres.';
+                return;
+            }
+
+            btnRegister.textContent = 'Criando...';
+            btnRegister.disabled = true;
+
+            try {
+                const res = await fetch(`${API_BASE}/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password })
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    localStorage.setItem('urban_token', data.token);
+                    localStorage.setItem('urban_user', JSON.stringify(data.user));
+                    showLoggedInState(data.user);
+                    updateUserIcon();
+                    // Clear inputs
+                    document.getElementById('registerName').value = '';
+                    document.getElementById('registerEmail').value = '';
+                    document.getElementById('registerPassword').value = '';
+                } else {
+                    if (errorEl) errorEl.textContent = data.error || 'Erro ao criar conta.';
+                }
+            } catch (err) {
+                console.error('Erro no registro:', err);
+                if (errorEl) errorEl.textContent = 'Erro de conexão. Tente novamente.';
+            } finally {
+                btnRegister.textContent = 'Criar Conta';
+                btnRegister.disabled = false;
+            }
+        });
+    }
+
+    // Logout
+    const btnLogout = document.getElementById('btnLogout');
+    if (btnLogout) {
+        btnLogout.addEventListener('click', () => {
+            localStorage.removeItem('urban_token');
+            localStorage.removeItem('urban_user');
+            updateUserIcon();
+            closeAuth();
+        });
+    }
+
+    // =============================================
     // CARREGAR PRODUTOS DA API (Com Filtros da URL)
     // =============================================
     async function loadProductsGrid() {
@@ -340,6 +678,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // =============================================
     updateCartCount();
     renderCartDrawer();
+    updateUserIcon();
     loadCategories();
     loadProductsGrid();
 
